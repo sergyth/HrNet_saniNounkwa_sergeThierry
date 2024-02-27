@@ -1,61 +1,112 @@
-import { useForm } from 'react-hook-form'
+import { useContext } from 'react'
+import { useForm, Controller } from 'react-hook-form'
 import { departmentOptionsData } from './departmentOptionsData'
 import { statesOptionsData } from './statesOptionsData'
+import DatePicker from 'react-datepicker'
+import { EmployeeContext } from '../../app/context'
 import { DevTool } from '@hookform/devtools'
+import 'react-datepicker/dist/react-datepicker.css'
 import './form.css'
 
 const Form = () => {
   const { register, control, handleSubmit, reset } = useForm()
-
+  const { addEmployee } = useContext(EmployeeContext)
   const onSubmit = (data) => {
-    console.log('submitted', data)
+    console.log('submitted', data.firstName)
+    addEmployee(data)
     reset()
   }
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} id="create-employee">
-        <label htmlFor="first-name">First Name</label>
-        <input type="text" id="first-name" {...register('first-name')} />
+        <label htmlFor="firstName">First Name</label>
+        <input
+          type="text"
+          id="firstName"
+          {...register('firstName', { required: 'Ce champ est requis.' })}
+        />
 
-        <label htmlFor="last-name">Last Name</label>
-        <input type="text" id="last-name" {...register('last-name')} />
+        <label htmlFor="lastName">Last Name</label>
+        <input
+          type="text"
+          id="lastName"
+          {...register('lastName', { required: 'Ce champ est requis.' })}
+        />
 
-        <label htmlFor="date-of-birth">Date of Birth</label>
-        <input id="date-of-birth" type="text" {...register('date-of-birth')} />
+        <label htmlFor="dateOfBirth">Date of Birth</label>
+        <Controller
+          name="dateOfBirth"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <DatePicker
+              placeholderText="Sélectionnez une date"
+              onChange={(date) => field.onChange(date)}
+              onBlur={() => {
+                field.onBlur()
+              }}
+              selected={field.value}
+            />
+          )}
+        />
 
-        <label htmlFor="start-date">Start Date</label>
-        <input id="start-date" type="text" {...register('start-date')} />
+        <label htmlFor="startDate">Start Date</label>
+        <Controller
+          name="startDate"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <DatePicker
+              placeholderText="Sélectionnez une date"
+              onChange={(date) => field.onChange(date)}
+              onBlur={() => {
+                field.onBlur()
+              }}
+              selected={field.value}
+            />
+          )}
+        />
 
         <fieldset className="address">
           <legend>Address</legend>
 
           <label htmlFor="street">Street</label>
-          <input id="street" type="text" {...register('street')} />
+          <input
+            id="street"
+            type="text"
+            {...register('street', { required: 'Ce champ est requis.' })}
+          />
 
           <label htmlFor="city">City</label>
-          <input id="city" type="text" {...register('city')} />
+          <input
+            id="city"
+            type="text"
+            {...register('city', { required: 'Ce champ est requis.' })}
+          />
 
           <label htmlFor="state">State</label>
-          <select id="state"
-          {...register('state', { required: 'Ce champ est requis.' })}
-          defaultValue=""
-        >
-          <option value="" disabled hidden>
-            Choisissez une option
-          </option>
-          {statesOptionsData.map((option) => (
-            <option key={option.name} value={option.name}>
-              {option.name}
+          <select
+            id="state"
+            {...register('state', { required: 'Ce champ est requis.' })}
+            defaultValue=""
+          >
+            <option value="" disabled hidden>
+              Choisissez une option
             </option>
-          ))}
-        </select>
-          <label htmlFor="zip-code">Zip Code</label>
-          <input id="zip-code" type="number" {...register('zip-code')} />
+            {statesOptionsData.map((option) => (
+              <option key={option.name} value={option.name}>
+                {option.name}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="zipCode">Zip Code</label>
+          <input id="zipCode" type="number" {...register('zip-code')} />
         </fieldset>
 
         <label htmlFor="department">Department</label>
-        <select id='department'
+        <select
+          id="department"
           {...register('department', { required: 'Ce champ est requis.' })}
           defaultValue=""
         >
