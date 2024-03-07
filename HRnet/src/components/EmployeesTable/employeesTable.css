@@ -1,0 +1,83 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pageSize {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  width: 10rem;
+  height: 3rem;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+}
+.search input,
+.search label,
+.pageSize select,
+.pageSize label {
+  height: 2rem;
+}
+.pageSize .tail {
+  height: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tr,
+.th,
+.td {
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.tr:nth-child(even) {
+  background-color: #374f6f;
+  color: white;
+}
+
+.th {
+  background-color: #4caf50;
+  color: white;
+}
+
+.pagination {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pagination button {
+  color: white;
+  margin: 2rem;
+  width: 6rem;
+}
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: auto;
+}
+
+.pageIndexBox {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.pageIndex {
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid rgb(9, 9, 9);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

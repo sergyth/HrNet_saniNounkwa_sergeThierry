@@ -1,19 +1,31 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { departmentOptionsData } from './departmentOptionsData'
 import { statesOptionsData } from './statesOptionsData'
 import DatePicker from 'react-datepicker'
 import { EmployeeContext } from '../../app/context'
+import { Modal } from 'sergyth-modal'
 import { DevTool } from '@hookform/devtools'
 import 'react-datepicker/dist/react-datepicker.css'
+import { format } from 'date-fns'
 import './form.css'
 
 const Form = () => {
   const { register, control, handleSubmit, reset } = useForm()
   const { addEmployee } = useContext(EmployeeContext)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const openModal = () => setIsModalOpen(true)
+  const closeModal = () => setIsModalOpen(false)
   const onSubmit = (data) => {
-    console.log('submitted', data.firstName)
-    addEmployee(data)
+    console.log(data)
+    const formattedData = {
+      ...data,
+      dateOfBirth: format(data.dateOfBirth, 'yyyy-MM-dd'),
+      startDate: format(data.startDate, 'yyyy-MM-dd'),
+    }
+
+    addEmployee(formattedData)
+    openModal()
     reset()
   }
 
@@ -95,13 +107,13 @@ const Form = () => {
               Choisissez une option
             </option>
             {statesOptionsData.map((option) => (
-              <option key={option.name} value={option.name}>
+              <option key={option.name} value={option.abbreviation}>
                 {option.name}
               </option>
             ))}
           </select>
           <label htmlFor="zipCode">Zip Code</label>
-          <input id="zipCode" type="number" {...register('zip-code')} />
+          <input id="zipCode" type="number" {...register('zipCode')} />
         </fieldset>
 
         <label htmlFor="department">Department</label>
@@ -123,6 +135,9 @@ const Form = () => {
           Save
         </button>
       </form>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <p>employee created</p>
+      </Modal>
       <DevTool control={control} />
     </>
   )

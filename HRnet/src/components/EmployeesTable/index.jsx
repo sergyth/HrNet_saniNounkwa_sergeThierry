@@ -1,49 +1,139 @@
-import { useContext, useMemo } from 'react'
-import { useTable } from 'react-table'
+/* eslint-disable react/jsx-key */
+import { useMemo, useState, useContext } from 'react'
+//import mockData from '../../app/mockData.json'
 import { EmployeeContext } from '../../app/context'
+import './employeesTable.css'
+import { useTable, usePagination, useGlobalFilter } from 'react-table'
+
 const EmployeesTable = () => {
   const { employees } = useContext(EmployeeContext)
-  console.log(employees)
+  const [filterInput, setFilterInput] = useState('')
+  //const data = useMemo(() => mockData, [])
   const data = useMemo(() => employees, [employees])
-
+  //console.log(data)
   const columns = useMemo(
     () => [
       { Header: 'First Name', accessor: 'firstName' },
       { Header: 'Last Name', accessor: 'lastName' },
-      { Header: 'Date of Birth', accessor: 'dateOfBirth' },
       { Header: 'Start Date', accessor: 'startDate' },
       { Header: 'Department', accessor: 'department' },
+      { Header: 'Date of Birth', accessor: 'dateOfBirth' },
+      { Header: 'Street', accessor: 'street' },
+      { Header: 'City', accessor: 'city' },
+      { Header: 'State', accessor: 'state' },
+      { Header: 'Zip Code', accessor: 'zipCode' },
     ],
     [],
   )
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data })
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    setPageSize,
+    prepareRow,
+    state: { pageIndex, pageSize },
+    //  { pageOptions,}
+    setGlobalFilter,
+    preGlobalFilteredRows,
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0 },
+    },
+    useGlobalFilter,
+    usePagination,
+  )
+
+  const handleFilterChange = (e) => {
+    const value = e.target.value || undefined
+    setGlobalFilter(value)
+    setFilterInput(value)
+  }
+
+  // Calcul pour l'affichage du nombre d'entrées
+  const firstRowNumber = pageIndex * pageSize + 1
+  const lastRowNumber = firstRowNumber + page.length - 1
+  const totalRows = preGlobalFilteredRows.length
 
   return (
-    <table {...getTableProps()}>
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+    <>
+      <div className="header">
+        <div className="pageSize">
+          <label htmlFor="pageSize">Show</label>
+          <select
+            id="pageSize"
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value))
+            }}
+          >
+            {[10, 20, 30, 50, 100].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
+              </option>
             ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row)
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => (
-                <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+          </select>
+          <span className="tail">Entries</span>
+        </div>
+        <div className="search">
+          <label htmlFor="search">Search</label>
+          <input
+            id="search"
+            value={filterInput}
+            onChange={handleFilterChange}
+            placeholder="Rechercher..."
+          />
+        </div>
+      </div>
+      <table {...getTableProps()} className="table">
+        <thead className="thead">
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()} className="tr">
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()} className="th">
+                  {column.render('Header')}
+                </th>
               ))}
             </tr>
-          )
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()} className="tbody">
+          {page.map((row) => {
+            prepareRow(row)
+            return (
+              <tr {...row.getRowProps()} className="tr">
+                {row.cells.map((cell) => (
+                  <td {...cell.getCellProps()} className="td">
+                    {cell.render('Cell')}
+                  </td>
+                ))}
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+      <div className="pagination">
+        <span>
+          Showing {firstRowNumber} to {lastRowNumber} of {totalRows} entries
+        </span>
+        <div className="pageIndexBox">
+          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+            Previous
+          </button>
+          <div className="pageIndex">{pageIndex + 1}</div>
+          <button onClick={() => nextPage()} disabled={!canNextPage}>
+            Next
+          </button>
+        </div>
+      </div>
+    </>
   )
 }
 
