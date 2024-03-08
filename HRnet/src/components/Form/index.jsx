@@ -5,7 +5,6 @@ import { statesOptionsData } from './statesOptionsData'
 import DatePicker from 'react-datepicker'
 import { EmployeeContext } from '../../app/context'
 import { Modal } from 'sergyth-modal'
-import { DevTool } from '@hookform/devtools'
 import 'react-datepicker/dist/react-datepicker.css'
 import { format } from 'date-fns'
 import './form.css'
@@ -17,7 +16,7 @@ const Form = () => {
   const openModal = () => setIsModalOpen(true)
   const closeModal = () => setIsModalOpen(false)
   const onSubmit = (data) => {
-    console.log(data)
+    //console.log(data)
     const formattedData = {
       ...data,
       dateOfBirth: format(data.dateOfBirth, 'yyyy-MM-dd'),
@@ -135,10 +134,9 @@ const Form = () => {
           Save
         </button>
       </form>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <p>employee created</p>
+      <Modal isOpen={isModalOpen} onClose={closeModal} className={{content:'modalContent'}}>
+        <p>Employee created</p>
       </Modal>
-      <DevTool control={control} />
     </>
   )
 }

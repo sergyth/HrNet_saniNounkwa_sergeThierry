@@ -3,7 +3,7 @@
   margin-top: 1rem;
   width: 6rem;
   color: white;
-  background-color: #014C85;
+  background-color: #014c85;
 }
 #create-employee {
   display: flex;
@@ -11,25 +11,36 @@
   align-items: center;
 }
 input,
-select{
-    border: 2px solid #106fb7;
-    background-color: #fff;
-    width: 20rem;
-    height: 1.5rem;
-    border-radius: .5rem;
-    margin: .5rem;
-    text-align: center;
+select {
+  border: 2px solid #106fb7;
+  background-color: #fff;
+  width: 20rem;
+  height: 1.5rem;
+  border-radius: 0.5rem;
+  margin: 0.5rem;
+  text-align: center;
 }
 label,
 fieldset,
-legend{
-    color: #014C85;
-    font-weight: bold;
-    display: block;
-    margin-top: .5rem ;
-    border-color:#106FB7;
-    border-radius: .5rem;
+legend {
+  color: #014c85;
+  font-weight: bold;
+  display: block;
+  margin-top: 0.5rem;
+  border-color: #106fb7;
+  border-radius: 0.5rem;
 }
-select{
-    height: 1.8rem;
+select {
+  height: 1.8rem;
+}
+.modalContent {
+  width: 15rem;
+  font-size: 1.1rem;
+}
+
+.close-button {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  color: red;
 }

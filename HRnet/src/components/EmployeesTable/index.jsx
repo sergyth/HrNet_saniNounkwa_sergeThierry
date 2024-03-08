@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-key */
 import { useMemo, useState, useContext } from 'react'
-//import mockData from '../../app/mockData.json'
 import { EmployeeContext } from '../../app/context'
 import './employeesTable.css'
 import { useTable, usePagination, useGlobalFilter } from 'react-table'
@@ -8,9 +7,7 @@ import { useTable, usePagination, useGlobalFilter } from 'react-table'
 const EmployeesTable = () => {
   const { employees } = useContext(EmployeeContext)
   const [filterInput, setFilterInput] = useState('')
-  //const data = useMemo(() => mockData, [])
   const data = useMemo(() => employees, [employees])
-  //console.log(data)
   const columns = useMemo(
     () => [
       { Header: 'First Name', accessor: 'firstName' },
@@ -38,7 +35,6 @@ const EmployeesTable = () => {
     setPageSize,
     prepareRow,
     state: { pageIndex, pageSize },
-    //  { pageOptions,}
     setGlobalFilter,
     preGlobalFilteredRows,
   } = useTable(
