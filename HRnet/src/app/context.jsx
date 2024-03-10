@@ -1,10 +1,16 @@
 /* eslint-disable react/prop-types */
-import { createContext, useState } from 'react'
+import { createContext, useState, useEffect } from 'react'
 
 export const EmployeeContext = createContext()
 
 export const EmployeeContextProvider = ({ children }) => {
-  const [employees, setEmployees] = useState([])
+  const [employees, setEmployees] = useState(() => {
+    const storedEmployees = localStorage.getItem('employees')
+    return storedEmployees ? JSON.parse(storedEmployees) : []
+  })
+  useEffect(() => {
+    localStorage.setItem('employees', JSON.stringify(employees))
+  }, [employees])
 
   const addEmployee = (newEmployee) => {
     setEmployees((prevEmployees) => [...prevEmployees, newEmployee])

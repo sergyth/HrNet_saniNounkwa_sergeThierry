@@ -5,6 +5,7 @@ import { statesOptionsData } from './statesOptionsData'
 import DatePicker from 'react-datepicker'
 import { EmployeeContext } from '../../app/context'
 import { Modal } from 'sergyth-modal'
+import { v4 as uuidv4 } from 'uuid'
 import 'react-datepicker/dist/react-datepicker.css'
 import { format } from 'date-fns'
 import './form.css'
@@ -21,6 +22,7 @@ const Form = () => {
       ...data,
       dateOfBirth: format(data.dateOfBirth, 'yyyy-MM-dd'),
       startDate: format(data.startDate, 'yyyy-MM-dd'),
+      id: uuidv4(),
     }
 
     addEmployee(formattedData)
@@ -134,7 +136,11 @@ const Form = () => {
           Save
         </button>
       </form>
-      <Modal isOpen={isModalOpen} onClose={closeModal} className={{content:'modalContent'}}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        className={{ content: 'modalContent' }}
+      >
         <p>Employee created</p>
       </Modal>
     </>

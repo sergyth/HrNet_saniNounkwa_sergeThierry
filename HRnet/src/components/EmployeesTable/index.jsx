@@ -1,8 +1,14 @@
-/* eslint-disable react/jsx-key */
 import { useMemo, useState, useContext } from 'react'
 import { EmployeeContext } from '../../app/context'
 import './employeesTable.css'
-import { useTable, usePagination, useGlobalFilter } from 'react-table'
+import {
+  useTable,
+  usePagination,
+  useGlobalFilter,
+  useSortBy,
+} from 'react-table'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons'
 
 const EmployeesTable = () => {
   const { employees } = useContext(EmployeeContext)
@@ -44,6 +50,7 @@ const EmployeesTable = () => {
       initialState: { pageIndex: 0 },
     },
     useGlobalFilter,
+    useSortBy,
     usePagination,
   )
 
@@ -84,17 +91,42 @@ const EmployeesTable = () => {
             id="search"
             value={filterInput}
             onChange={handleFilterChange}
-            placeholder="Rechercher..."
+            placeholder="Search..."
           />
         </div>
       </div>
       <table {...getTableProps()} className="table">
         <thead className="thead">
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()} className="tr">
+            <tr
+              {...headerGroup.getHeaderGroupProps()}
+              className="tr"
+              key="header"
+            >
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()} className="th">
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  className="th"
+                  key={column.id}
+                >
                   {column.render('Header')}
+                  <span className="sortIcon">
+                    {column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <FontAwesomeIcon icon={faSortDown} />
+                      ) : (
+                        <FontAwesomeIcon icon={faSortUp} />
+                      )
+                    ) : (
+                      <>
+                        <FontAwesomeIcon
+                          icon={faSortUp}
+                          style={{ visibility: 'hidden' }}
+                        />
+                        <FontAwesomeIcon icon={faSortDown} />
+                      </>
+                    )}
+                  </span>
                 </th>
               ))}
             </tr>
@@ -104,9 +136,13 @@ const EmployeesTable = () => {
           {page.map((row) => {
             prepareRow(row)
             return (
-              <tr {...row.getRowProps()} className="tr">
+              <tr {...row.getRowProps()} className="tr" key={row.id}>
                 {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()} className="td">
+                  <td
+                    {...cell.getCellProps()}
+                    className="td"
+                    key={cell.column.id}
+                  >
                     {cell.render('Cell')}
                   </td>
                 ))}
